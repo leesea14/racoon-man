@@ -23,9 +23,14 @@ def hello_callback(request):
 # global var
 user_list = simple_slack_bot.helper_get_user_ids()
 user_dict = {}
+user_call_dict = {}
 
 for user in user_list:
     user_dict[user] = 0
+    user_call_dict[user] = {
+        'last_order': '',
+        'request_cnt': 0
+    }
 
 
 @simple_slack_bot.register("message")
@@ -38,6 +43,13 @@ def racoon_message(request):
     if request.message:
         recv_msg = request.message
         if recv_msg.find("너굴맨") != -1:
+            request_cnt = manage_request_cnt(request.user)
+            if request_cnt > 5:
+                return
+            elif request_cnt == 5:
+                return request.write(f'@{simple_slack_bot.helper_user_id_to_user_name(request.user)} 괴롭힌다 너굴맨! 너굴맨 무시한다 당신!')
+            elif request_cnt >= 3:
+                return request.write(f'바쁜데 계속 말걸지말라구 @{simple_slack_bot.helper_user_id_to_user_name(request.user)}')
 
             if recv_msg.find("잘못") != -1 or recv_msg.find("미안") != -1:
                 if random.choice([True, False]):
@@ -185,9 +197,21 @@ def racoon_message(request):
                 request.write(minus_like_percent(request.user, count))
 
 
-def minus_like_percent(user_id, num):
-    user_dict[user_id] -= num
-    return f'흥이라구, @{simple_slack_bot.helper_user_id_to_user_name(user_id)}'
+
+def manage_request_cnt(user_id):
+    return_cnt = 0
+    for u in user_list:
+        if u == user_id:
+            user_call_dict[u]['request_cnt'] += 1
+            return_cnt = user_call_dict[u]['request_cnt']
+        elif user_call_dict[u]['request_cnt'] != 0:
+            user_call_dict[u]['request_cnt'] -= 1
+    return return_cnt
+
+def minus_like_percent(user_id):
+    user_dict[user_id] -= 5
+    return f'괴롭히지 말라구, @{simple_slack_bot.helper_user_id_to_user_name(user_id)}'
+
 
 
 def plus_like_percent(user_id):
