@@ -54,7 +54,7 @@ class SimpleSlackBot:
         :param debug: Whether or not to use default a Logging config
         """
 
-        self._SLACK_BOT_TOKEN = os.environ['HERREN_TOKEN']
+        self._SLACK_BOT_TOKEN = os.environ['TEST_TOKEN']
         # self._SLACK_BOT_TOKEN = os.environ['TEST_TOKEN']
         if self._SLACK_BOT_TOKEN is None:
             sys.exit("ERROR: environment variable SLACK_BOT_TOKEN is not set")

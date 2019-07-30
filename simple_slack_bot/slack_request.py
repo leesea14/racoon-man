@@ -43,6 +43,21 @@ class SlackRequest(object):
         return channel
 
     @property
+    def reply_ts(self):
+        """Gets the channel from the underlying SlackEvent
+        Note: This can be an empty String. For example, this will be an empty String for the 'Hello' event.
+
+        :return: the channel this SlackEvent originated from, if there is one
+        """
+
+        reply_ts = ""
+
+        if "event_ts" in self._slack_event.event:
+            reply_ts = self._slack_event.event["event_ts"]
+
+        return reply_ts
+
+    @property
     def user(self):
         """Gets the underlying message from the SlackEvent
         get user
@@ -77,6 +92,29 @@ class SlackRequest(object):
 
         try:
             self._slacker.chat.post_message(channel, content)
+        except Exception as e:
+            logger.warning(e)
+
+    def reply(self, content, channel=None, reply_ts=None):
+        """
+        reply to ts
+        :param reply_ts:
+        :param content:
+        :param channel:
+        :return:
+        """
+        if channel is None and self.channel != "":
+            channel = self.channel
+        else:
+            logger.warning("no channel provided by developer or respective slack event")
+
+        reply_ts = self._slack_event.event.get("thread_ts")
+
+        if (not reply_ts) and self.reply_ts:
+            reply_ts = self._slack_event.event["event_ts"]
+
+        try:
+            self._slacker.chat.reply(channel, content, reply_ts)
         except Exception as e:
             logger.warning(e)
 

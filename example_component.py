@@ -132,8 +132,9 @@ def racoon_message(request):
                 else:
                     request.write('너굴맨 집가고 싶다구')
 
-            if recv_msg.find("테스트") != -1:
-                request.write(f'@{simple_slack_bot.helper_user_id_to_user_name(request.user)} 안녕이라구')
+            if recv_msg.find("댓글") != -1:
+                msg = recv_msg.replace("댓글", "")
+                request.reply(msg)
 
             if recv_msg.find("칭찬해") != -1:
                 request.write('잘했다구')
