@@ -1,4 +1,6 @@
 # Racoon Man🐾
+![issueopen](https://img.shields.io/github/issues/badges/shields.svg)
+![lastcommit](https://img.shields.io/github/last-commit/sehajyang/racoon-man.svg)  
 Simple Slack Bot Project **RACOON MAN**🐾  
 슬랙 봇 프로젝트 라쿤맨 입니다.    
 Base Source : [https://github.com/GregHilston/Simple-Slack-Bot](https://github.com/GregHilston/Simple-Slack-Bot)  
