@@ -37,7 +37,7 @@ for user in user_list:
 def racoon_message(request):
     count = 0
     if request.channel == 'CLWDPD2KY':
-        if random.randrange(1, 50) > 45 and request.user != 'UECK50ENB':
+        if random.randrange(1, 50) > 45 and request.user != 'UECK50ENB' and user_dict[request.user] < 0:
             request.reply(f'고문 해버린다구,@{simple_slack_bot.helper_user_id_to_user_name(request.user)}')
 
     if request.message:
@@ -51,11 +51,17 @@ def racoon_message(request):
             elif request_cnt >= 3:
                 return request.write(f'바쁜데 계속 말걸지말라구 @{simple_slack_bot.helper_user_id_to_user_name(request.user)}')
 
-            if (recv_msg.find("호감도") != -1 or recv_msg.find("친밀도") != -1 )and recv_msg.find("보여") != -1:
+            if recv_msg.find("잘못") != -1 or recv_msg.find("미안") != -1:
+                if random.choice([True, False]):
+                    return request.write(plus_like_percent(request.user))
+                else:
+                    return request.write(minus_like_percent(request.user, 1))
+
+            if (recv_msg.find("호감도") != -1 or recv_msg.find("친밀도") != -1) and recv_msg.find("보여") != -1:
                 request.write(get_like_percent(request.user))
 
             if user_dict.get(request.user) is not None:
-                if user_dict[request.user] >= -15:
+                if user_dict[request.user] >= -14:
                     pass
                 else:
                     if random.choice([True, False]):
@@ -178,7 +184,7 @@ def racoon_message(request):
                 count += 1
 
             if recv_msg.find("댓글") != -1:
-                msg = recv_msg.replace("댓글", "")
+                msg = recv_msg.replace("댓글", "").replace("너굴맨", "")
                 request.reply(msg)
                 count += 1
 
@@ -187,11 +193,9 @@ def racoon_message(request):
                 request.write('잘했다구')
                 count += 1
 
-            if recv_msg.find("잘못") != -1 or recv_msg.find("미안") != -1:
-                request.write(plus_like_percent(request.user))
+            if count > 1:
+                request.write(minus_like_percent(request.user, count))
 
-            if count > 2:
-                request.write(minus_like_percent(request.user))
 
 
 def manage_request_cnt(user_id):
@@ -209,8 +213,9 @@ def minus_like_percent(user_id):
     return f'괴롭히지 말라구, @{simple_slack_bot.helper_user_id_to_user_name(user_id)}'
 
 
+
 def plus_like_percent(user_id):
-    user_dict[user_id] += 5
+    user_dict[user_id] += 1
     return f'잘하라구, @{simple_slack_bot.helper_user_id_to_user_name(user_id)}'
 
 
