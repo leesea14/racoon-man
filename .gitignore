@@ -7,7 +7,7 @@ MANIFEST
 *.log
 
 # I don't intend on committing my registered components
-*component.py
+# *component.py
 
 
 # Created by https://www.gitignore.io/api/macos,python,jetbrains
