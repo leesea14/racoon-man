@@ -95,12 +95,12 @@ class SlackRequest(object):
         except Exception as e:
             logger.warning(e)
 
-    def reply(self, content, channel=None, reply_ts=None):
+    def reply(self, content, channel=None):
         """
         reply to ts
-        :param reply_ts:
         :param content:
         :param channel:
+        :return:
         :return:
         """
         if channel is None and self.channel != "":

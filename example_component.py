@@ -28,7 +28,7 @@ user_list = list(zip(simple_slack_bot.helper_get_user_ids(), simple_slack_bot.he
 def racoon_message(request):
     if request.channel == 'CLWDPD2KY':
         if random.randrange(1, 50) > 45 and request.user != 'UECK50ENB':
-            request.write(f'고문 해버린다구,@{simple_slack_bot.helper_user_id_to_user_name(request.user)}')
+            request.reply(f'고문 해버린다구,@{simple_slack_bot.helper_user_id_to_user_name(request.user)}')
 
     if request.message:
         recv_msg = request.message
