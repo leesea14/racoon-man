@@ -6,7 +6,7 @@ Base Source : [https://github.com/GregHilston/Simple-Slack-Bot](https://github.c
 추가/수정하고싶은 부분이 있다면 풀리퀘 날려주세요 🙆 
 
 ## Enviroment
-Programming Language : python 3.6 이상
+Programming Language : python 3.6 이상  
 Language : Korean
 
 ## Get Started
