@@ -39,7 +39,7 @@ def racoon_message(request):
         recv_msg = request.message
         if recv_msg.find("너굴맨") != -1:
 
-            if recv_msg.find("호감도") != -1 and recv_msg.find("보여") != -1:
+            if (recv_msg.find("호감도") != -1 or recv_msg.find("친밀도") != -1 )and recv_msg.find("보여") != -1:
                 request.write(get_like_percent(request.user))
 
             if user_dict.get(request.user) is not None:
