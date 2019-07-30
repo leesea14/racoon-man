@@ -45,7 +45,7 @@ def racoon_message(request):
             if user_dict.get(request.user) is not None:
                 if user_dict[request.user] >= -20:
                     pass
-                elif -15 >= user_dict[request.user] >= -20:
+                elif -10 >= user_dict[request.user] >= -20:
                     request.write('후회할거라구')
                 else:
                     if random.choice([True, False]):
