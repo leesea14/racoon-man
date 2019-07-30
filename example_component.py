@@ -39,10 +39,13 @@ def racoon_message(request):
         recv_msg = request.message
         if recv_msg.find("너굴맨") != -1:
 
+            if recv_msg.find("호감도") != -1 and recv_msg.find("보여") != -1:
+                request.write(get_like_percent(request.user))
+
             if user_dict.get(request.user) is not None:
                 if user_dict[request.user] >= -20:
                     pass
-                elif user_dict[request.user] >= -15:
+                elif user_dict[request.user] <= -15:
                     request.write('후회할거라구')
                 else:
                     if random.choice([True, False]):
@@ -113,11 +116,12 @@ def racoon_message(request):
                 count += 1
 
             if recv_msg.find("안녕") != -1 and request.user is not None:
-                if random.choice([True, False]):
+                if user_dict[request.user] > 5:
                     request.write(f"반갑다구 @{simple_slack_bot.helper_user_id_to_user_name(request.user)}:racoon_man:")
+                    user_dict[request.user] += 1
                 else:
                     request.write("너-하 라구!")
-                count += 1
+                    user_dict[request.user] += 1
 
             if recv_msg.find("안될까") != -1:
                 msg = '싫다구'
@@ -169,11 +173,9 @@ def racoon_message(request):
                 count += 1
 
             if recv_msg.find("칭찬해") != -1:
+                user_dict[request.user] += 1
                 request.write('잘했다구')
                 count += 1
-
-            if recv_msg.find("호감도") != -1 and recv_msg.find("보여") != -1:
-                request.write(get_like_percent(request.user))
 
             if recv_msg.find("잘못") != -1 or recv_msg.find("미안") != -1:
                 request.write(plus_like_percent(request.user))
