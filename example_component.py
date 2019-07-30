@@ -43,10 +43,8 @@ def racoon_message(request):
                 request.write(get_like_percent(request.user))
 
             if user_dict.get(request.user) is not None:
-                if user_dict[request.user] >= -20:
+                if user_dict[request.user] >= -15:
                     pass
-                elif -10 >= user_dict[request.user] >= -20:
-                    request.write('후회할거라구')
                 else:
                     if random.choice([True, False]):
                         return request.write('흥이라구')
