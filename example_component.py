@@ -20,12 +20,17 @@ def hello_callback(request):
 #     request.write(f"I see you typing {user_id}")
 #
 
-# 채널에 있는 유저 리스트
-user_list = list(zip(simple_slack_bot.helper_get_user_ids(), simple_slack_bot.helper_get_user_names()))
+# global var
+user_list = simple_slack_bot.helper_get_user_ids()
+user_dict = {}
+
+for user in user_list:
+    user_dict[user] = 0
 
 
 @simple_slack_bot.register("message")
 def racoon_message(request):
+    count = 0
     if request.channel == 'CLWDPD2KY':
         if random.randrange(1, 50) > 45 and request.user != 'UECK50ENB':
             request.reply(f'고문 해버린다구,@{simple_slack_bot.helper_user_id_to_user_name(request.user)}')
@@ -34,11 +39,24 @@ def racoon_message(request):
         recv_msg = request.message
         if recv_msg.find("너굴맨") != -1:
 
+            if user_dict.get(request.user) is not None:
+                if user_dict[request.user] >= -20:
+                    pass
+                elif user_dict[request.user] >= -15:
+                    request.write('후회할거라구')
+                else:
+                    if random.choice([True, False]):
+                        return request.write('흥이라구')
+                    else:
+                        return request.write('싹싹빌라구')
+
             if recv_msg.find("어디") != -1:
                 request.write(f'너굴맨은 #{simple_slack_bot.helper_channel_id_to_channel_name(request.channel)}에 있다구')
+                count += 1
 
             if recv_msg.find("난") != -1 and recv_msg.find("누구") != -1:
                 request.write(f'@{simple_slack_bot.helper_user_id_to_user_name(request.user)} 라구')
+                count += 1
 
             if recv_msg.find("될까") != -1 \
                     or recv_msg.find("할까") != -1 \
@@ -50,9 +68,11 @@ def racoon_message(request):
                 else:
                     rst = "아니라구"
                 request.write(rst)
+                count += 1
 
             if recv_msg.find("미세먼지") != -1:
                 request.write(mise_switch())
+                count += 1
 
             if (recv_msg.find("뭐") != -1 and recv_msg.find("먹을까") != -1) \
                     or recv_msg.find("점심추천") != -1 \
@@ -60,6 +80,7 @@ def racoon_message(request):
                     or recv_msg.find("배고파") != -1:
                 lunch_list = ['와규', '설렁탕', '쌈밥', '김치찌개', '예윤', '이자까야', '플레이티드', '등갈비 찜', '쌀국수', '부대찌개']
                 request.write(random.choice(lunch_list) + ' 어떠냐구')
+                count += 1
 
             if recv_msg.find("처치") != -1:
                 if recv_msg.find("사악한") != -1:
@@ -84,20 +105,24 @@ def racoon_message(request):
                         request.write("이 너굴맨이 처치했으니 안심하라구!:racoon_man:")
                     else:
                         request.write("너굴맨 휴무라구 알아서 하라구")
+                count += 1
 
             if recv_msg.find("도와줘요") != -1:
                 msg = '`너굴맨 점심추천해줘, 너굴맨 처치해줘, 너굴맨 미세먼지, 너굴맨 날씨` 를 도와줄수 있다구!'
                 request.write(msg)
+                count += 1
 
             if recv_msg.find("안녕") != -1 and request.user is not None:
                 if random.choice([True, False]):
                     request.write(f"반갑다구 @{simple_slack_bot.helper_user_id_to_user_name(request.user)}:racoon_man:")
                 else:
                     request.write("너-하 라구!")
+                count += 1
 
             if recv_msg.find("안될까") != -1:
                 msg = '싫다구'
                 request.write(msg)
+                count += 1
 
             if (recv_msg.find("오늘") != -1
                 or recv_msg.find("현재") != -1
@@ -106,38 +131,69 @@ def racoon_message(request):
                 soup = weather_init_soup()
                 request.write(get_thermal(soup))
                 request.write(get_weather(soup))
+                count += 1
 
             if recv_msg.find("게임추천") != -1 or recv_msg.find("궨트") != -1:
                 if random.choice([True, False]):
                     request.write('궨트 츄라이해보라구 갓겜이라구:racoon_man:')
                 else:
                     request.write("엥 그거 갓겜아니냐구 갓겜을 쌈에싸서 드셔보시라구:racoon_man:")
+                count += 1
 
             if recv_msg.find("히오스") != -1:
                 request.write('시공의폭풍이라구')
+                count += 1
 
             if recv_msg.find("돌겜") != -1 or recv_msg.find("하스스톤") != -1 \
                     or recv_msg.find("하스") != -1:
                 request.write('돌겜은 너나 하라구')
+                count += 1
 
             if recv_msg.find("지금") != -1 and recv_msg.find("비와") != -1:
                 if get_weather(weather_init_soup()).find('비') != -1:
                     request.write('비가온다구!!')
                 else:
                     request.write('안온다구')
+                count += 1
 
             if recv_msg.find("졸려") != -1 or recv_msg.find("졸립다") != -1:
                 if random.choice([True, False]):
                     request.write('너굴맨도 졸립다구')
                 else:
                     request.write('너굴맨 집가고 싶다구')
+                count += 1
 
             if recv_msg.find("댓글") != -1:
                 msg = recv_msg.replace("댓글", "")
                 request.reply(msg)
+                count += 1
 
             if recv_msg.find("칭찬해") != -1:
                 request.write('잘했다구')
+                count += 1
+
+            if recv_msg.find("호감도") != -1 and recv_msg.find("보여") != -1:
+                request.write(get_like_percent(request.user))
+
+            if recv_msg.find("잘못") != -1 or recv_msg.find("미안") != -1:
+                request.write(plus_like_percent(request.user))
+
+            if count > 2:
+                request.write(minus_like_percent(request.user))
+
+
+def minus_like_percent(user_id):
+    user_dict[user_id] -= 5
+    return f'괴롭히지 말라구, @{simple_slack_bot.helper_user_id_to_user_name(user_id)}'
+
+
+def plus_like_percent(user_id):
+    user_dict[user_id] += 5
+    return f'잘하라구, @{simple_slack_bot.helper_user_id_to_user_name(user_id)}'
+
+
+def get_like_percent(user_id):
+    return f'{user_dict[user_id]} 라구'
 
 
 def weather_init_soup():
