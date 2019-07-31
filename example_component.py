@@ -53,7 +53,11 @@ def racoon_message(request):
         if recv_msg.find("너굴맨") != -1:
 
             request_cnt = manage_request_cnt(request.user)
-            if request_cnt > 10:
+            if simple_slack_bot.helper_user_id_to_user_name(request.user) == 'seha':
+                if request_cnt >= 5:
+                    request.write(f'아무리 바빠도 주인님의 명령을 무시할수는 없다구')
+                threading.Thread(target=manage_cnt_after_time, args=(request.user, 60))
+            elif request_cnt > 10:
                 threading.Thread(target=manage_cnt_after_time, args=(request.user, 600))
                 return
             elif request_cnt == 10:
@@ -62,6 +66,8 @@ def racoon_message(request):
             elif request_cnt >= 5:
                 threading.Thread(target=manage_cnt_after_time, args=(request.user, 120))
                 return request.write(f'바쁜데 계속 말걸지말라구 @{simple_slack_bot.helper_user_id_to_user_name(request.user)}')
+            else:
+                threading.Thread(target=manage_cnt_after_time, args=(request.user, 60))
 
             if recv_msg.find("잘못") != -1 or recv_msg.find("미안") != -1:
                 if random.choice([True, False]):
