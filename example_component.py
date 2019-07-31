@@ -3,6 +3,8 @@ import random
 import requests
 import re
 import pyjosa
+import time
+import threading
 from bs4 import BeautifulSoup
 
 simple_slack_bot = SimpleSlackBot(debug=True)
@@ -11,6 +13,12 @@ simple_slack_bot = SimpleSlackBot(debug=True)
 @simple_slack_bot.register("hello")
 def hello_callback(request):
     request.write("너하-! 난 너굴맨이라구 필요한게 있으면 불러달라구:racoon_man:")
+
+
+def manage_cnt_after_time(user, sec):
+    time.sleep(sec)
+    if user_call_dict[user]['request_cnt'] > 0:
+        user_call_dict[user]['request_cnt'] -= 1
 
 
 # 타이핑 할 때마다 이벤트 발생
@@ -45,10 +53,13 @@ def racoon_message(request):
         if recv_msg.find("너굴맨") != -1:
             request_cnt = manage_request_cnt(request.user)
             if request_cnt > 5:
+                threading.Thread(target=manage_cnt_after_time, args=(request.user, 600))
                 return
             elif request_cnt == 5:
+                threading.Thread(target=manage_cnt_after_time, args=(request.user, 300))
                 return request.write(f'@{simple_slack_bot.helper_user_id_to_user_name(request.user)} 괴롭힌다 너굴맨! 너굴맨 무시한다 당신!')
             elif request_cnt >= 3:
+                threading.Thread(target=manage_cnt_after_time, args=(request.user, 120))
                 return request.write(f'바쁜데 계속 말걸지말라구 @{simple_slack_bot.helper_user_id_to_user_name(request.user)}')
 
             if (recv_msg.find("호감도") != -1 or recv_msg.find("친밀도") != -1 )and recv_msg.find("보여") != -1:
