@@ -1,4 +1,6 @@
 # Racoon Man🐾
+![issueopen](https://img.shields.io/github/issues/sehajyang/racoon-man.svg)
+![lastcommit](https://img.shields.io/github/last-commit/sehajyang/racoon-man.svg)  
 Simple Slack Bot Project **RACOON MAN**🐾  
 슬랙 봇 프로젝트 라쿤맨 입니다.    
 Base Source : [https://github.com/GregHilston/Simple-Slack-Bot](https://github.com/GregHilston/Simple-Slack-Bot)  
@@ -10,14 +12,16 @@ Programming Language : python 3.6 이상
 Language : Korean
 
 ## Get Started
-1. Install requirement
+1. Create your slack bot  
+[https://get.slack.help/hc/en-us/articles/115005265703-Create-a-bot-for-your-workspace](https://get.slack.help/hc/en-us/articles/115005265703-Create-a-bot-for-your-workspace)
+2. Install requirement
 ```
 pip install -r requirement.txt
 ```
 
-2. Create `.env` File
+3. Create `.env` File, Setting Auth Token
 ```
 HERREN_TOKEN=YOUR_TOKEN
 ```
 
-3. Run `example_component.py`
+4. Run `example_component.py`
